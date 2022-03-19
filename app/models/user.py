@@ -1,6 +1,8 @@
+from asyncio.windows_events import NULL
 from app.config.mysqlconnection import connectToMySQL
 from flask import flash
 import re
+from datetime import datetime
 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$') 
 
@@ -57,14 +59,54 @@ class User:
     
     #Validations
     @staticmethod
-    def validation(user):
+    def validate_registration(user):
         is_valid = True
+        query = 'SELECT * FROM user WHERE email=%(email)s;'
+        results = connectToMySQL(User.db).query_db(query, user)
+        #validate email
+        if len(results) >= 1:
+            is_valid = False
+            flash('This email is already being used.')
+        if len(user['email']) < 1:
+            is_valid = False
+            flash('You must add an email address.')
+        elif not EMAIL_REGEX.match(user['email']):
+            is_valid = False
+            flash('Invalid email format.')
+        #validate names
         if len(user['first_name']) < 2:
             flash('First name must be at least two characters.')
             is_valid = False
         if len(user['last_name']) < 2:
-            flash('last name must be at least two characters.')
+            flash('Last name must be at least two characters.')
             is_valid = False
+        
+        #validate password
+        if len(user['password']) < 8:
+            is_valid = False
+            flash("Password must be at least 8 characters.")
+        #confirm password
+        if user['password'] != user['confirm']:
+            is_valid = False
+            flash('Passwords must match.')
+        #validate dob
+        if user['dob'] == '':
+            is_valid = False
+            flash('Date of birth is required.')
+        if (user['dob']) == None:
+            is_valid = False
+            flash("You haven't been born yet. Please check your date of birth.")
+        #validation pc_or_mac - must select one
+        if user['pc_or_mac'].checked:
+            is_valid = False
+            flash('You must select pc or mac.')
+        #fav_animal
+        if len(user['fav_animal']) < 1 or user['fav_animal'] == 'Choose an animal':
+            is_valid = False
+            flash('You must select an animal.')
         #Add additional validation conditions for remaining fields
         return is_valid
         
+        
+    def hash_pw(password):
+        pass
