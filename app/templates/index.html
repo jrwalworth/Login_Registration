@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Registration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,400&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="a-form">
+    <div class="container">
+        <div class="row both-forms">
+            <div class="col-4 m-3">
+                <form action='/register' class='myForm regForm' method='post'>
+                    <h3 class="text-primary">Register</h3>
+                    <div class="messages text-danger">
+                        {% with messages = get_flashed_messages() %}     <!-- declare a variable called messages -->
+                            {% if messages %}                            <!-- check if there are any messages -->
+                                {% for message in messages %}            <!-- loop through the messages -->
+                                    <p>{{message}}</p>                   <!-- display each message in a paragraph tag -->
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                    <div class="m-area mb-3">
+                        <label for="first_name" class="text-light mb-1">First Name:</label>
+                        <input type="text" class="d-block mb-2 form-control" name="first_name">
+                        <label for="last_name" class="text-light mb-1">Last Name:</label>
+                        <input type="text" class="d-block mb-2 form-control" name="last_name">
+                        <label for="email" class="text-light mb-1">Email:</label>
+                        <input type="text" class="d-block mb-2 form-control" name="email">
+                        <label for="password" class="text-light mb-1">Password:</label>
+                        <input type="password" class="d-block mb-2 form-control" name="password">
+                        <label for="conf-password" class="text-light mb-1">Confirm Password:</label>
+                        <input type="password" class="d-block mb-2 form-control" name="confirm">
+                        <label for="cdob" class="text-light mb-1">Date of Birth:</label>
+                        <input type="date" class="d-block mb-2 form-control" name="dob">
+
+                            <label for="pc_or_mac" class="text-light mb-1">PC or MAC: </label>
+                            <div class="input-group-radios mb-1">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="PC">
+                                    <label class="form-check-label text-light" for="PC">PC</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="MAC">
+                                    <label class="form-check-label text-light" for="MAC">MAC</label>
+                                </div>
+                            </div>
+
+                        <label for="fav_animal" class="text-light mb-1">Favorite Animal:</label>
+                        <select name="fav_animal" class="d-block mb-3 form-select">
+                            <option selected>--Select Animal--</option>
+                            <option value="Cat">Cat</option>
+                            <option value="Dog">Dog</option>
+                            <option value="Bird">Bird</option>
+                            <option value="Shark">Shark</option>
+                            <option value="Elephant">Elephant</option>
+                        </select>
+                        <div class="submit">
+                            <input type='submit' value="Register" class="btn btn-primary btn-block">
+                            <!-- <a href id="submit" class="btn btn-warning btn-block" type="submit" value="add_data">Submit</a href> -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-4 m-3">
+                <form action='/login' class='myForm loginForm' method='post'>
+                    <h3 class="text-success">Login</h3>
+                    <div class="messages text-danger">
+                        {% with messages = get_flashed_messages() %}     <!-- declare a variable called messages -->
+                            {% if messages %}                            <!-- check if there are any messages -->
+                                {% for message in messages %}            <!-- loop through the messages -->
+                                    <p>{{message}}</p>                   <!-- display each message in a paragraph tag -->
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                    <div class="m-area mb-3">
+                        <label for="email" class="text-light mb-1">Email:</label>
+                        <input type="text" class="d-block mb-3 form-control" name="email">
+                        <label for="password" class="text-light mb-1">Password:</label>
+                        <input type="password" class="d-block mb-3 form-control" name="password">
+                        <div class="submit">
+                            <input type='submit' value="Login" class="btn btn-success btn-block">
+                            <!-- <a href id="submit" class="btn btn-warning btn-block" type="submit" value="add_data">Submit</a href> -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    
+</body>
+</html>

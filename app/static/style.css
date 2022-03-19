@@ -1,0 +1,44 @@
+* {
+    margin:0;
+    padding:0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.a-form {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.b-results {
+text-align: center;
+width: 600px;
+margin-left: 20%;
+
+}
+
+.myForm {
+    padding: 25px;
+    background-color: rgb(70, 74, 90);
+    width: 400px;
+    border-radius: 3px;
+    margin-bottom: 50px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+#comments {
+    height: 100px;
+    vertical-align: top;
+}
+
+#divider {
+    border-bottom: 1px solid black
+}
+
+.both-forms {
+    display:flex;
+    justify-content: space-evenly;
+    align-items:flex-start;
+}
