@@ -53,14 +53,14 @@ def login():
     flash('You are logged in.')
     return redirect('/success/')
 
-#
+#logout hidden method, redirect back to index login page.
 @app.route('/logout')
 def logout():
     session.clear()
     flash('You are now logged out.')
     return redirect('/')
 
-#
+#view page after login successfully
 @app.route('/success/')
 def welcome_page():
     if 'user_id' not in session:
