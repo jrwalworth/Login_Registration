@@ -23,12 +23,11 @@ def register():
         #hash password
         'password' : bcrypt.generate_password_hash(request.form['password']),
         'dob' : request.form['dob'],
-        'pc_or_mac' : request.form['pc_or_mac'],
         'fav_animal' : request.form['fav_animal'],
-        'created_at' : request.form['created_at'],
-        'updated_at' : request.form['updated_at'],
+        'subscribe' : request.form['subscribe'],
+    
     }
-    id = User.save(newUser)
+    id = User.insert(newUser)
     if not id:
         flash('Something went wrong.')
         return redirect('/')
@@ -59,4 +58,4 @@ def logout():
 #
 @app.route('/welcome/')
 def welcome_page():
-    pass
+    return render_template('welcome.html')

@@ -15,10 +15,11 @@ class User:
         self.email = data['email']
         self.password = data['password']
         self.dob = data['dob']
-        self.pc_or_mac = data['pc_or_mac']
+        # self.pc_or_mac = data['pc_or_mac']
         self.fav_animal = data['fav_animal']
+        self.subscribe = data['subscribe']
         self.created_at = data['created_at']
-        self.updated_at = data['iupdated_at']
+        self.updated_at = data['updated_at']
         
     @classmethod
     def get_all(cls):
@@ -40,16 +41,16 @@ class User:
     @classmethod
     def insert(cls, data):
         query = "INSERT INTO user ( first_name, last_name, email, password, \
-            dob, pc_or_mac, fav_animal, created_at, updated_at) VALUES \
+            dob,  fav_animal, subscribe, created_at, updated_at) VALUES \
             (%(first_name)s, %(last_name)s, %(email)s, %(password)s, %(dob)s,\
-            %(pc_or_mac)s, %(fav_animal)s,NOW(), NOW() );"
+            %(fav_animal)s, %(subscribe)s,NOW(), NOW() );"
         return connectToMySQL(cls.db).query_db(query, data)
     
     @classmethod
     def update(cls, data):
         query = "UPDATE user SET first_name=%(first_name)s, last_name=%(last_name)s,\
-            email=%(email)s, password=%(password)s, dob=%(dob)s, pc_or_mac=%(pc_or_mac)s,\
-            fav_animale=%(fav_animal)s, updated_at=NOW() WHERE id=%(id)s;"
+            email=%(email)s, password=%(password)s, dob=%(dob)s, fav_animal=%(fav_animal)s, \
+            subscribe=%(subscribe)s,updated_at=NOW() WHERE id=%(id)s;"
         return connectToMySQL(cls.db).query_db(query, data)
     
     @classmethod
@@ -64,15 +65,15 @@ class User:
         query = 'SELECT * FROM user WHERE email=%(email)s;'
         results = connectToMySQL(User.db).query_db(query, user)
         #validate email
-        if len(results) >= 1:
-            is_valid = False
-            flash('This email is already being used.')
         if len(user['email']) < 1:
             is_valid = False
             flash('You must add an email address.')
         elif not EMAIL_REGEX.match(user['email']):
             is_valid = False
             flash('Invalid email format.')
+        if len(results) >= 1:
+            is_valid = False
+            flash('This email is already being used.')
         #validate names
         if len(user['first_name']) < 2:
             flash('First name must be at least two characters.')
@@ -97,16 +98,16 @@ class User:
             is_valid = False
             flash("You haven't been born yet. Please check your date of birth.")
         #validation pc_or_mac - must select one
-        if user['pc_or_mac'].checked:
-            is_valid = False
-            flash('You must select pc or mac.')
+        # if user['pc_or_mac'].checked:
+        #     is_valid = False
+        #     flash('You must select pc or mac.')
         #fav_animal
         if len(user['fav_animal']) < 1 or user['fav_animal'] == 'Choose an animal':
             is_valid = False
             flash('You must select an animal.')
-        #Add additional validation conditions for remaining fields
+        #subscribe checkbox - default 0, checked is 1.
+        if user['subscribe'] =! 1:
+            user['subscribe'] == 0
+        
         return is_valid
         
-        
-    def hash_pw(password):
-        pass
