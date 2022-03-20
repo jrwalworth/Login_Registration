@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from app.config.mysqlconnection import connectToMySQL
 from flask import flash
 import re
@@ -17,7 +16,7 @@ class User:
         self.dob = data['dob']
         # self.pc_or_mac = data['pc_or_mac']
         self.fav_animal = data['fav_animal']
-        self.subscribe = data['subscribe']
+        self.agree = data['agree']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
         
@@ -39,18 +38,26 @@ class User:
         return cls(results[0])
     
     @classmethod
+    def get_email(cls, data):
+        query = "SELECT * FROM user WHERE email=%(email)s;"
+        results = connectToMySQL(cls.db).query_db(query, data)
+        if len(results) < 1:
+            return False
+        return cls(results[0])
+    
+    @classmethod
     def insert(cls, data):
         query = "INSERT INTO user ( first_name, last_name, email, password, \
-            dob,  fav_animal, subscribe, created_at, updated_at) VALUES \
+            dob,  fav_animal, agree, created_at, updated_at) VALUES \
             (%(first_name)s, %(last_name)s, %(email)s, %(password)s, %(dob)s,\
-            %(fav_animal)s, %(subscribe)s,NOW(), NOW() );"
+            %(fav_animal)s, %(agree)s,NOW(), NOW() );"
         return connectToMySQL(cls.db).query_db(query, data)
     
     @classmethod
     def update(cls, data):
         query = "UPDATE user SET first_name=%(first_name)s, last_name=%(last_name)s,\
             email=%(email)s, password=%(password)s, dob=%(dob)s, fav_animal=%(fav_animal)s, \
-            subscribe=%(subscribe)s,updated_at=NOW() WHERE id=%(id)s;"
+            agree=%(agree)s,updated_at=NOW() WHERE id=%(id)s;"
         return connectToMySQL(cls.db).query_db(query, data)
     
     @classmethod
@@ -81,7 +88,6 @@ class User:
         if len(user['last_name']) < 2:
             flash('Last name must be at least two characters.')
             is_valid = False
-        
         #validate password
         if len(user['password']) < 8:
             is_valid = False
@@ -105,9 +111,11 @@ class User:
         if len(user['fav_animal']) < 1 or user['fav_animal'] == 'Choose an animal':
             is_valid = False
             flash('You must select an animal.')
-        #subscribe checkbox - default 0, checked is 1.
-        if user['subscribe'] =! 1:
-            user['subscribe'] == 0
-        
+        print(user['agree'])
+        if user['agree'] != "1":
+            is_valid = False
+            flash('You must agree to the Privacy Policy.')
         return is_valid
         
+    def fullName(self):
+        return f'{self.first_name} {self.last_name}'
