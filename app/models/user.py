@@ -5,6 +5,9 @@ from datetime import datetime
 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$') 
 
+#min 8 characters, at least one letter and one number.
+PW_REGEX = re.compile(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$')
+
 class User:
     db='user_login_schema'
     def __init__(self, data):
@@ -89,9 +92,9 @@ class User:
             flash('Last name must be at least two characters.')
             is_valid = False
         #validate password
-        if len(user['password']) < 8:
+        if not PW_REGEX.match(user['password']):
             is_valid = False
-            flash("Password must be at least 8 characters.")
+            flash("Password must be at least 8 characters and contain at least one letter and one number.")
         #confirm password
         if user['password'] != user['confirm']:
             is_valid = False
